@@ -22,11 +22,20 @@ shinyServer(function(input, output) {
                                                                              as.numeric(input$noise))        
                         }
                         else {
-                                # A unit is subtracted when Time is 21 (%% 2 = 1) to avoid exceeding 22.
-                                ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, 
-                                                                             as.numeric(input$noise) - ChickWeight$Time %% 2)        
+                                # When the noise is high, 20 and 21 are limited to increase up to 1 in order to 
+                                # avoid overlapping between their data points
+                                if (ChickWeight$Time < 20)
+                                {
+                                        ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, 
+                                                                                     as.numeric(input$noise))
+                                }
+                                else
+                                {
+                                        ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, 
+                                                                                     1)
+                                }
+   
                         }
-                        
                         chart <- hPlot(weight ~ Time, data = ChickWeight, group = "DietType", 
                                        type = "scatter", title = "Chicken fattening", 
                                        subtitle = "Comparative analysis on diet type")
@@ -35,8 +44,18 @@ shinyServer(function(input, output) {
                         chart$plotOptions(scatter = list(marker = list(symbol = 'circle')))
                         chart$colors('rgba(255, 127, 0, .5)', 'rgba(172, 148, 184, .5)', 
                                      'rgba(51, 187, 107, .5)', 'rgba(245, 245, 47, .5)')
-                        chart$tooltip(formatter = "#! function() 
-                                      {return 'Age = ' + Math.floor(parseInt(this.x, 10) / 2) * 2 + ' days, Weight = ' + this.y + ' gm'; } !#")
+                        if (as.numeric(input$noise) < -12){
+                                popup <- paste("#! function() ",
+                                               "{return 'Age = ' + parseInt(this.x, 10) + ' days,", 
+                                               " Weight = ' + this.y + ' gm'; } !#")
+                        }
+                        else {
+                                popup <- paste("#! function() ",
+                                               "{return 'Age = ' + ((parseInt(this.x, 10) >= 21) ? 21 : ", 
+                                               " Math.floor(parseInt(this.x, 10) / 2) * 2) + ' days,", 
+                                               " Weight = ' + this.y + ' gm'; } !#")
+                        }
+                        chart$tooltip(formatter = popup)
                         chart$addParams(dom = "chart")
                         return(chart)    
                 }
@@ -64,7 +83,8 @@ shinyServer(function(input, output) {
                 else
                 {
                         # Message when there is no data to display
-                        message <- "There is no data for the current selection. There are no records for this time period."
+                        message <- paste("There is no data for the current selection.", 
+                                         "There are no records for this time period.")
                 }
                 return (message)
         })

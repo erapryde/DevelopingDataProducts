@@ -19,11 +19,15 @@ shinyUI(
                       strong("datasets"), " package and the user inputs are:"),
                     tags$ol(
                             tags$li(strong("Time period after birth: "), "Range of living days to display."),
-                            tags$li(strong("Random noise: "), "Level of random uniform noise added to prevent overplotting: None, Low, Medium or High."),
-                            tags$li("Over the interactive chart, where each data point denotes one observation or chicken:",
+                            tags$li(strong("Random noise: "), "Level of random uniform noise added to prevent ",
+                                    "overplotting: None, Low, Medium or High."),
+                            tags$li("Over the interactive chart, where each data point denotes one observation ", 
+                                    "or chicken:",
                                     tags$ul(
-                                            tags$li("By hovering the mouse over a data point, a popup label will show the age and weight of the chicken."), 
-                                            tags$li("By clicking on a diet type legend, chickens tested with this type will be hidden when visible or shown when invisible.")
+                                            tags$li("By hovering the mouse over a data point, a popup label ", 
+                                                    "will show the age and weight of the chicken."), 
+                                            tags$li("By clicking on a diet type legend, chickens tested with ", 
+                                                    "this type will be hidden when visible or shown when invisible.")
                                     ))
                     ),
                     
