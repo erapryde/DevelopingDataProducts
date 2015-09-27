@@ -10,7 +10,7 @@ shinyServer(function(input, output) {
         
         # Scatter chart with age versus weight of chickens 
         output$chart <- renderChart({
-                # The data comes from the Chickweight dataset included in the R datasets package.
+                # The data come from the Chickweight dataset included in the R datasets package.
                 data(ChickWeight)
                 # The date range of living days is limited according to the user input for "range"
                 ChickWeight <- subset(ChickWeight, Time %in% seq(input$range[1], input$range[2], 1))
