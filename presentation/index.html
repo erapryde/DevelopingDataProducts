@@ -78,7 +78,10 @@
 <p>Range of living days to display. It determines the interval of days for which <strong>the data are reduced for the plot and results</strong>.
 The values in the X axis are delimited by this range.</p>
 
-<p>For example, selecting an interval from 7 to 18 days reduces the available data to chickens aged between 7 and 18 days. The X axis is shortened and the best result on average is computed only for this time period. </p>
+<pre><code class="r">ChickWeight &lt;- subset(ChickWeight, Time %in% seq(input$range[1], input$range[2], 1))
+</code></pre>
+
+<p>For example, selecting an interval from 7 to 18 days reduces the available data to chickens aged between 7 and 18 days and the best result on average is computed only for this time period. </p>
 
 <p><img src="snapshot5.jpg" alt=""></p>
 
@@ -95,11 +98,12 @@ The values in the X axis are delimited by this range.</p>
 
 <p><img src="snapshot6.jpg" alt=""></p>
 
-<p>Level of random uniform noise added to the time with the aim of preventing overplotting: None, Low, Medium or High.</p>
+<p>Level of random uniform noise added to the time with the aim of preventing overplotting: None (0), Low (0.5), Medium (1) or High (2). It concerns the data point distances in the plot. </p>
+
+<pre><code class="r">ChickWeight$Time &lt;- ChickWeight$Time + runif(length(ChickWeight$Time), 0, as.numeric(input$noise))
+</code></pre>
 
 <p>When the level of noise is &quot;None&quot;, the data points fall together overplotted in the same vertical where X equals to the observed day, since there are data collected only for the even days and the day 21. All the other levels add a progressive quantity of noise to the time in order to scatter the points and be more distant to avoid overlapping. </p>
-
-<p>This input concerns only to the data point distances in the plot.  </p>
 
   </article>
   <!-- Presenter Notes -->

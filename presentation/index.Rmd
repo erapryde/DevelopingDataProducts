@@ -38,7 +38,11 @@ The application is availabe on RStudio's Shiny server at:
 Range of living days to display. It determines the interval of days for which **the data are reduced for the plot and results**.
 The values in the X axis are delimited by this range.
 
-For example, selecting an interval from 7 to 18 days reduces the available data to chickens aged between 7 and 18 days. The X axis is shortened and the best result on average is computed only for this time period. 
+```{r interval, eval=FALSE}
+ChickWeight <- subset(ChickWeight, Time %in% seq(input$range[1], input$range[2], 1))
+```
+
+For example, selecting an interval from 7 to 18 days reduces the available data to chickens aged between 7 and 18 days and the best result on average is computed only for this time period. 
 
 ![](snapshot5.jpg)
 
@@ -50,12 +54,13 @@ For example, selecting an interval from 7 to 18 days reduces the available data 
 
 ![](snapshot6.jpg)
 
-Level of random uniform noise added to the time with the aim of preventing overplotting: None, Low, Medium or High.
+Level of random uniform noise added to the time with the aim of preventing overplotting: None (0), Low (0.5), Medium (1) or High (2). It concerns the data point distances in the plot. 
+
+```{r time, eval=FALSE}
+ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, as.numeric(input$noise))
+```
 
 When the level of noise is "None", the data points fall together overplotted in the same vertical where X equals to the observed day, since there are data collected only for the even days and the day 21. All the other levels add a progressive quantity of noise to the time in order to scatter the points and be more distant to avoid overlapping. 
-
-This input concerns only to the data point distances in the plot.  
-
 
 
 ---
