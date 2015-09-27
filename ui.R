@@ -16,7 +16,7 @@ shinyUI(
                     h3(strong("Effect of diet on chicken fattening")),
                     p("This application enables the visual analysis of the evolution of weight gain", 
                       "on the effect of different diets on early growth of chickens.",
-                      "The data comes from the", strong("ChickWeight"), "dataset available in the R", 
+                      "The data come from the", strong("ChickWeight"), "dataset available in the R", 
                       strong("datasets"), " package and the user inputs are:"),
                     tags$ol(
                             tags$li(strong("Time period after birth: "), "Range of living days to display."),

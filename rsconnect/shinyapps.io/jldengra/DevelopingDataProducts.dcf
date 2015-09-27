@@ -1,8 +1,8 @@
 name: DevelopingDataProducts
 account: jldengra
 server: shinyapps.io
-bundleId: 275279
+bundleId: 275705
 url: https://jldengra.shinyapps.io/DevelopingDataProducts
-when: 1443372785.77783
+when: 1443392828.9536
 asMultiple: FALSE
 asStatic: FALSE
