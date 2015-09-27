@@ -8,22 +8,28 @@ library(datasets)
 
 shinyServer(function(input, output) {
         
-        # Weight vs age scatter chart of chickens 
+        # Scatter chart with age versus weight of chickens 
         output$chart <- renderChart({
+                # The data comes from the Chickweight dataset included in the R datasets package.
                 data(ChickWeight)
+                # The date range of living days is limited according to the user input for "range"
                 ChickWeight <- subset(ChickWeight, Time %in% seq(input$range[1], input$range[2], 1))
                 if (nrow(ChickWeight) > 0)
+                # When there is data according to the user selection
                 {
+                        # DietType variable is added to define labels for each diet type
                         ChickWeight$DietType = paste('Diet type', as.character(ChickWeight$Diet)) 
-                        # A random uniform noise depending on user input is added to scatter the points for a 
-                        # given age because the measured ages are all discrete and mostly even (only 21 is odd).
+                        
+                        # A random uniform noise is added to scatter the points for a given age because  
+                        # the measured ages are all discrete and mostly even (only the value 21 is odd).
+                        # The level of aditional noise depends on the user input for "noise".
                         if (as.numeric(input$noise) < 2){
                                 ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, 
                                                                              as.numeric(input$noise))        
                         }
                         else {
-                                # When the noise is high, 20 and 21 are limited to increase up to 1 in order to 
-                                # avoid overlapping between their data points
+                                # When the noise is high (2), 20 and 21 are limited to increase up to 1 in order  
+                                # to avoid overlapping between their data points.
                                 if (ChickWeight$Time < 20)
                                 {
                                         ChickWeight$Time <- ChickWeight$Time + runif(length(ChickWeight$Time), 0, 
@@ -36,6 +42,8 @@ shinyServer(function(input, output) {
                                 }
    
                         }
+                        
+                        # A scatter plot is built drawing circles that discrimine diet types by color
                         chart <- hPlot(weight ~ Time, data = ChickWeight, group = "DietType", 
                                        type = "scatter", title = "Chicken fattening", 
                                        subtitle = "Comparative analysis on diet type")
@@ -44,26 +52,25 @@ shinyServer(function(input, output) {
                         chart$plotOptions(scatter = list(marker = list(symbol = 'circle')))
                         chart$colors('rgba(255, 127, 0, .5)', 'rgba(172, 148, 184, .5)', 
                                      'rgba(51, 187, 107, .5)', 'rgba(245, 245, 47, .5)')
-                        if (as.numeric(input$noise) < -12){
-                                popup <- paste("#! function() ",
-                                               "{return 'Age = ' + parseInt(this.x, 10) + ' days,", 
-                                               " Weight = ' + this.y + ' gm'; } !#")
-                        }
-                        else {
-                                popup <- paste("#! function() ",
-                                               "{return 'Age = ' + ((parseInt(this.x, 10) >= 21) ? 21 : ", 
-                                               " Math.floor(parseInt(this.x, 10) / 2) * 2) + ' days,", 
-                                               " Weight = ' + this.y + ' gm'; } !#")
-                        }
+                        # A popup message with the age and weight is defined in a JavaScript function and
+                        # added as tooltip for the chart. The age is computed as the nearer even number
+                        # before the time increased with the noise, except for weight over 21 that correspond
+                        # to the odd number 21. 
+                        popup <- paste("#! function() ",
+                                       "{ return 'Age = ' + ((parseInt(this.x, 10) >= 21) ? 21 : ", 
+                                       "  Math.floor(parseInt(this.x, 10) / 2) * 2) + ' days,", 
+                                       "  Weight = ' + this.y + ' gm'; } !#")
                         chart$tooltip(formatter = popup)
                         chart$addParams(dom = "chart")
                         return(chart)    
                 }
                 else
+                # When there is no data according to the user selection
                 {
-                        # Empty chart when there is no data to display
-                        return(Rickshaw$new()) 
+                        # An empty chart is assigned since there is no data to display
+                        chart <- Rickshaw$new()
                 }
+                return(chart)   
         })
         
         # Text indicating the best results on average
@@ -71,6 +78,7 @@ shinyServer(function(input, output) {
                 data(ChickWeight)
                 ChickWeight <- subset(ChickWeight, Time %in% seq(input$range[1], input$range[2], 1))
                 if (nrow(ChickWeight) > 0)
+                # When there is data according to the user selection
                 {
                         # Message with the diet type with the highest average weight in the subset
                         ChickWeight$DietType = paste('Diet type', as.character(ChickWeight$Diet)) 
@@ -81,6 +89,7 @@ shinyServer(function(input, output) {
                                         ".", sep = "")
                 }
                 else
+                # When there is no data according to the user selection
                 {
                         # Message when there is no data to display
                         message <- paste("There is no data for the current selection.", 

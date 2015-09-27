@@ -9,18 +9,19 @@ library(rCharts)
 shinyUI(
         # Fluid Bootstrap layout
         fluidPage(
-                # Instructions about the application
+                # Container layer with a light blue background style
                 div(class = "alert alert-info",
+                    
+                    # Instructions about the application
                     h3(strong("Effect of diet on chicken fattening")),
-                    p("This application enables the exploratory data analysis of the 
-                      evolution of weight gain on the effect of different diets on 
-                      early growth of chickens. The data comes from the", 
-                      strong("ChickWeight"), "dataset available in the R", 
+                    p("This application enables the visual analysis of the evolution of weight gain", 
+                      "on the effect of different diets on early growth of chickens.",
+                      "The data comes from the", strong("ChickWeight"), "dataset available in the R", 
                       strong("datasets"), " package and the user inputs are:"),
                     tags$ol(
                             tags$li(strong("Time period after birth: "), "Range of living days to display."),
-                            tags$li(strong("Random noise: "), "Level of random uniform noise added to prevent ",
-                                    "overplotting: None, Low, Medium or High."),
+                            tags$li(strong("Random noise: "), "Level of random uniform noise added to the time ",
+                                    "with the aim of preventing overplotting: None, Low, Medium or High."),
                             tags$li("Over the interactive chart, where each data point denotes one observation ", 
                                     "or chicken:",
                                     tags$ul(
@@ -33,6 +34,7 @@ shinyUI(
                     
                     # Row with a sidebar
                     sidebarLayout(
+                            
                             # Left panel for the inputs and the average best results
                             sidebarPanel(
                                     sliderInput("range",
@@ -51,7 +53,7 @@ shinyUI(
                                     helpText(textOutput("average"))
                             ),
                             
-                            # Spot for the chart
+                            # Spot for the interactive chart
                             mainPanel(
                                     showOutput("chart", lib = "highcharts")
                             )
