@@ -83,7 +83,7 @@ shinyServer(function(input, output) {
                         # Message with the diet type with the highest average weight in the subset
                         ChickWeight$DietType = paste('Diet type', as.character(ChickWeight$Diet)) 
                         diets <- aggregate(weight ~ DietType, data = ChickWeight, FUN = "mean")
-                        message <- paste("For the current selection frame, the higher weight on average is ", 
+                        message <- paste("For the current selection frame, the highest weight on average is ", 
                                         round(diets[which.max(diets[,2]), ]$weight, digits = 2), 
                                         " gm, achieved by ", diets[which.max(diets[,2]), ]$DietType, 
                                         ".", sep = "")

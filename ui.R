@@ -49,7 +49,7 @@ shinyUI(
                                                    "High" = "2"), 
                                                  selected = "1"),
                                     hr(),
-                                    p(strong("Best results on average:")),
+                                    p(strong("Best result on average:")),
                                     helpText(textOutput("average"))
                             ),
                             
